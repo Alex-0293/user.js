@@ -94,7 +94,7 @@ user_pref("browser.shell.checkDefaultBrowser", false);
 /* 0102: set START page (0=blank, 1=home, 2=last visited page, 3=resume previous session)
  * [NOTE] Session Restore is not used in PB mode (0110) and is cleared with history (2803, 2804)
  * [SETTING] General>Startup>Restore previous session ***/
-user_pref("browser.startup.page", 0);
+user_pref("browser.startup.page", 1);
 /* 0103: set HOME+NEWWINDOW page
  * about:home=Activity Stream (default, see 0105), custom URL, about:blank
  * [SETTING] Home>New Windows and Tabs>Homepage and new windows ***/
@@ -339,8 +339,10 @@ user_pref("extensions.systemAddon.update.url", ""); // [FF44+]
 /* 0506: disable PingCentre telemetry (used in several System Add-ons) [FF57+]
  * Currently blocked by 'datareporting.healthreport.uploadEnabled' (see 0340) ***/
 user_pref("browser.ping-centre.telemetry", false);
-/* 0515: disable Screenshots ***/
-   // user_pref("extensions.screenshots.disabled", true); // [FF55+]
+/* 0515: disable Screenshots
+ * alternatively in FF60+, disable uploading to the Screenshots server ***/
+   user_pref("extensions.screenshots.disabled", true); // [FF55+]
+   user_pref("extensions.screenshots.upload-disabled", true); // [FF60+]
 /* 0517: disable Form Autofill
  * [NOTE] Stored data is NOT secure (uses a JSON file)
  * [NOTE] Heuristics controls Form Autofill on forms without @autocomplete attributes
@@ -521,7 +523,7 @@ user_pref("_user.js.parrot", "0900 syntax error: the parrot's expired!");
 /* 0901: disable saving passwords
  * [NOTE] This does not clear any passwords already saved
  * [SETTING] Privacy & Security>Logins and Passwords>Ask to save logins and passwords for websites ***/
-   // user_pref("signon.rememberSignons", false);
+   user_pref("signon.rememberSignons", false);
 /* 0902: use a primary password
  * There are no preferences for this. It is all handled internally.
  * [SETTING] Privacy & Security>Logins and Passwords>Use a Primary Password
@@ -611,7 +613,7 @@ user_pref("toolkit.winRegisterApplicationRestart", false);
  * URL shortcuts use a cached randomly named .ico file which is stored in your
  * profile/shortcutCache directory. The .ico remains after the shortcut is deleted.
  * If set to false then the shortcuts use a generic Firefox icon ***/
-user_pref("browser.shell.shortcutFavicons", false);
+user_pref("browser.shell.shortcutFavicons", true);
 /* 1031: disable favicons in history and bookmarks
  * Stored as data blobs in favicons.sqlite, these don't reveal anything that your
  * actual history (and bookmarks) already do. Your history is more detailed, so
@@ -766,14 +768,18 @@ user_pref("dom.security.https_only_mode_send_http_background_request", false);
  * [1] https://en.wikipedia.org/wiki/3des#Security
  * [2] https://en.wikipedia.org/wiki/Meet-in-the-middle_attack
  * [3] https://www-archive.mozilla.org/projects/security/pki/nss/ssl/fips-ssl-ciphersuites.html ***/
-   // user_pref("security.ssl3.rsa_des_ede3_sha", false);
+   user_pref("security.ssl3.rsa_des_ede3_sha", false);
+/* 1263: disable DHE (Diffie-Hellman Key Exchange)
+ * [1] https://www.eff.org/deeplinks/2015/10/how-to-protect-yourself-from-nsa-attacks-1024-bit-DH ***/
+   user_pref("security.ssl3.dhe_rsa_aes_128_sha", false); // [DEFAULT: false FF78+]
+   user_pref("security.ssl3.dhe_rsa_aes_256_sha", false); // [DEFAULT: false FF78+]
 /* 1264: disable the remaining non-modern cipher suites as of FF78 (in order of preferred by FF) ***/
-   // user_pref("security.ssl3.ecdhe_ecdsa_aes_256_sha", false);
-   // user_pref("security.ssl3.ecdhe_ecdsa_aes_128_sha", false);
-   // user_pref("security.ssl3.ecdhe_rsa_aes_128_sha", false);
-   // user_pref("security.ssl3.ecdhe_rsa_aes_256_sha", false);
-   // user_pref("security.ssl3.rsa_aes_128_sha", false); // no PFS
-   // user_pref("security.ssl3.rsa_aes_256_sha", false); // no PFS
+   user_pref("security.ssl3.ecdhe_ecdsa_aes_256_sha", false);
+   user_pref("security.ssl3.ecdhe_ecdsa_aes_128_sha", false);
+   user_pref("security.ssl3.ecdhe_rsa_aes_128_sha", false);
+   user_pref("security.ssl3.ecdhe_rsa_aes_256_sha", false);
+   user_pref("security.ssl3.rsa_aes_128_sha", false); // no PFS
+   user_pref("security.ssl3.rsa_aes_256_sha", false); // no PFS
 
 /** UI (User Interface) ***/
 /* 1270: display warning on the padlock for "broken security" (if 1201 is false)
@@ -891,7 +897,7 @@ user_pref("privacy.userContext.enabled", true);
 /* 1703: set behaviour on "+ Tab" button to display container menu on left click [FF74+]
  * [NOTE] The menu is always shown on long press and right click
  * [SETTING] General>Tabs>Enable Container Tabs>Settings>Select a container for each new tab ***/
-   // user_pref("privacy.userContext.newTabContainerOnLeftClick.enabled", true);
+   user_pref("privacy.userContext.newTabContainerOnLeftClick.enabled", true);
 
 /*** [SECTION 1800]: PLUGINS ***/
 user_pref("_user.js.parrot", "1800 syntax error: the parrot's pushing up daisies!");
@@ -1091,7 +1097,7 @@ user_pref("_user.js.parrot", "2500 syntax error: the parrot's shuffled off 'is m
  * e.g. do you have a battery or not, current charging status, charge level, times remaining etc
  * [NOTE] From FF52+ Battery Status API is only available in chrome/privileged code, see [1]
  * [1] https://bugzilla.mozilla.org/1313580 ***/
-   // user_pref("dom.battery.enabled", false);
+user_pref("dom.battery.enabled", false);
 /* 2505: disable media device enumeration [FF29+]
  * [NOTE] media.peerconnection.enabled should also be set to false (see 2001)
  * [1] https://wiki.mozilla.org/Media/getUserMedia
@@ -1120,7 +1126,7 @@ user_pref("dom.webaudio.enabled", false);
  * 0=always ask (default), 1=allow, 2=block
  * [SETTING] to add site exceptions: Page Info>Permissions>Access Virtual Reality Devices
  * [SETTING] to manage site exceptions: Options>Privacy & Security>Permissions>Virtual Reality>Settings ***/
-   // user_pref("permissions.default.xr", 0);
+user_pref("permissions.default.xr", 2);
 
 /*** [SECTION 2600]: MISCELLANEOUS ***/
 user_pref("_user.js.parrot", "2600 syntax error: the parrot's run down the curtain!");
@@ -1165,7 +1171,7 @@ user_pref("network.http.redirection-limit", 10);
 /* 2615: disable websites overriding Firefox's keyboard shortcuts [FF58+]
  * 0 (default) or 1=allow, 2=block
  * [SETTING] to add site exceptions: Page Info>Permissions>Override Keyboard Shortcuts ***/
-   // user_pref("permissions.default.shortcuts", 2);
+user_pref("permissions.default.shortcuts", 2);
 /* 2616: remove special permissions for certain mozilla domains [FF35+]
  * [1] resource://app/defaults/permissions ***/
 user_pref("permissions.manager.defaultsUrl", "");
@@ -1281,7 +1287,7 @@ user_pref("network.cookie.thirdparty.nonsecureSessionOnly", true); // [FF58+]
  * 0=keep until they expire (default), 2=keep until you close Firefox
  * [NOTE] The setting below is disabled (but not changed) if you block all cookies (2701 = 2)
  * [SETTING] Privacy & Security>Cookies and Site Data>Delete cookies and site data when Firefox is closed ***/
-   // user_pref("network.cookie.lifetimePolicy", 2);
+   user_pref("network.cookie.lifetimePolicy", 2);
 /* 2710: disable DOM (Document Object Model) Storage
  * [WARNING] This will break a LOT of sites' functionality AND extensions!
  * You are better off using an extension for more granular control ***/
